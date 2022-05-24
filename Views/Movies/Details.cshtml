@@ -1,0 +1,10 @@
+﻿@model Vidly.Models.Movie
+
+<h1>@Model.Name</h1>
+
+<ul>
+    <li>Genre: @Model.Genre.Name</li>
+    <li>Release date: @Model.ReleaseDate.ToString("dd/MM/yyyy")</li>
+    <li>Date added: @Model.DateAdded.ToString("dd/MM/yyyy")</li>
+    <li>Number in stock: @Model.NumberInStock</li>
+</ul>
