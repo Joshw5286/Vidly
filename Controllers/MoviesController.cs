@@ -33,7 +33,7 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            var viewModel = new MovieFormViewModel
+            var viewModel = new MovieFormViewModel()
             {
                 Genres = _context.Genres.ToList()
             };
@@ -42,8 +42,18 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new MovieFormViewModel(movie)
+                {
+                    Genres = _context.Genres
+                };
+                return View("MovieForm", viewModel);
+            }
+
             if(movie.Id == 0)
             {
                 movie.DateAdded = DateTime.Now;
@@ -79,9 +89,8 @@ namespace Vidly.Controllers
             {
                 return HttpNotFound();
             }
-            var viewModel = new MovieFormViewModel
+            var viewModel = new MovieFormViewModel(movie)
             {
-                Movie = movie,
                 Genres = _context.Genres.ToList()
             };
 
@@ -122,16 +131,5 @@ namespace Vidly.Controllers
         {
             return Content(year + "/" + month);
         }  
-
-        private IEnumerable<Movie> GetMovies()
-        {
-            var movies = new List<Movie>
-            {
-                new Movie{ Id = 1, Name = "Shrek" },
-                new Movie{ Id = 2, Name = "Wall-e" }
-            };
-
-            return movies;
-        }
     }
 }
