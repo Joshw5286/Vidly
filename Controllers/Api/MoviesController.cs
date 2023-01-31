@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Data.Entity;
-using System.Net.Http;
 using System.Web.Http;
 using Vidly.Dtos;
 using Vidly.Models;
@@ -20,21 +19,25 @@ namespace Vidly.Controllers.Api
             _context = new ApplicationDbContext();
         }
 
-        public IHttpActionResult GetMovies()
+        public IEnumerable<MovieDTO> GetMovies(string query = null)
         {
-            var movieDTOs = _context.Movies
+            var moviesQuery = _context.Movies
                 .Include(m => m.Genre)
+                .Where(m => m.NumberAvailable > 0);
+
+            if (!String.IsNullOrWhiteSpace(query))
+                moviesQuery = moviesQuery.Where(m => m.Name.Contains(query));
+
+            return moviesQuery
                 .ToList()
                 .Select(Mapper.Map<Movie, MovieDTO>);
-
-            return Ok(movieDTOs);
         }
 
         public IHttpActionResult GetMovie(int id)
         {
             var movie = _context.Movies.SingleOrDefault(m => m.Id == id);
 
-            if(movie == null)
+            if (movie == null)
             {
                 return NotFound();
             }
@@ -54,7 +57,7 @@ namespace Vidly.Controllers.Api
             var movie = Mapper.Map<MovieDTO, Movie>(movieDTO);
 
             _context.Movies.Add(movie);
-            _context.SaveChanges();
+            //_context.SaveChanges();
 
             movieDTO.Id = movie.Id;
 
@@ -72,7 +75,7 @@ namespace Vidly.Controllers.Api
 
             var movieInDb = _context.Movies.SingleOrDefault(m => m.Id == id);
 
-            if(movieInDb == null)
+            if (movieInDb == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
