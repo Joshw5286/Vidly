@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Vidly.Controllers
@@ -16,6 +13,9 @@ namespace Vidly.Controllers
 
         public ActionResult About()
         {
+
+            throw new Exception();
+
             ViewBag.Message = "Your application description page.";
 
             return View();

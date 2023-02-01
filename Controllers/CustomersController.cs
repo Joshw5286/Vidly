@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
-using System.Data.Entity;
 
 namespace Vidly.Controllers
 {
@@ -38,7 +35,7 @@ namespace Vidly.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 var viewModel = new CustomerFormViewModel
                 {
@@ -70,7 +67,7 @@ namespace Vidly.Controllers
         {
             var customer = _context.Customers.SingleOrDefault(x => x.Id == id);
 
-            if(customer == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
@@ -93,7 +90,7 @@ namespace Vidly.Controllers
         {
             Customer customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(x => x.Id == id);
 
-            if(customer == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }

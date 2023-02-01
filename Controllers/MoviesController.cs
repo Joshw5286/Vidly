@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
 
 namespace Vidly.Controllers
 {
@@ -59,7 +57,7 @@ namespace Vidly.Controllers
                 return View("MovieForm", viewModel);
             }
 
-            if(movie.Id == 0)
+            if (movie.Id == 0)
             {
                 movie.DateAdded = DateTime.Now;
                 _context.Movies.Add(movie);
@@ -91,7 +89,7 @@ namespace Vidly.Controllers
         {
             var movie = _context.Movies.Single(m => m.Id == id);
 
-            if(movie == null)
+            if (movie == null)
             {
                 return HttpNotFound();
             }
@@ -107,7 +105,7 @@ namespace Vidly.Controllers
         {
             var movie = _context.Movies.Include(m => m.Genre).SingleOrDefault(x => x.Id == id);
 
-            if(movie == null)
+            if (movie == null)
             {
                 return HttpNotFound();
             }
@@ -136,6 +134,6 @@ namespace Vidly.Controllers
         public ActionResult ByReleaseDate(int year, int month)
         {
             return Content(year + "/" + month);
-        }  
+        }
     }
 }
